@@ -46,6 +46,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Autowired
 	private MessageSource messageSource;
 	
+	@Override
 	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		return ResponseEntity.status(status).headers(headers).build();
@@ -85,6 +86,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
 	
+	
+	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -123,6 +126,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problema, headers, status, request);
 	}
 
+	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 
@@ -150,7 +154,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.detail(detail)
 				.status(status.value())
 				.title(tipoProblema.getTitulo())
-				.type(tipoProblema.getUri()); 
+				.type("SECC " + tipoProblema.getUri()); 
 	}
 	
 	/*Novos metodos internos para serem modificados*/
@@ -174,6 +178,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	    return handleExceptionInternal(ex, problema, headers, status, request);
 	}   
 	
+	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		
@@ -195,6 +200,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
 	
+	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		
@@ -218,36 +224,30 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
 	
+	/**
+	 * Capturando uma exceção quando uma regra de validação é ignorada
+	 */
+	@Override
 	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
 			WebRequest request) {
 		
 		return handleValidationInternal(ex, headers, status, request, ex.getBindingResult());
 	}
 	
+	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		TipoDoProblema problemType = TipoDoProblema.DADOS_INVALIDOS;
-	    String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+	    String detail = "One or more fields are invalid. Fill in correctly and try again.";
 	    
 	    BindingResult bindingResult = ex.getBindingResult();
 	    
-//	    List<Problema.Object> problemFields = bindingResult.getFieldErrors().stream()
-//	    		.map(fieldError -> {
-//	    			//Aqui ele pega a mensagem do 'messages.properties'
-//	    			String message = messageSource.getMessage(fieldError, 
-//	    					LocaleContextHolder.getLocale());
-//	    			return Problema.Object.builder()
-//	    				.name(fieldError.getField())
-//	    				.userMessage(message)
-//	    				.build();
-//	    		})
-//	    		.collect(Collectors.toList());
-	    
 	    List<Problema.Object> problemFields = bindingResult.getFieldErrors().stream()
 	    		.map(fieldError -> {
-	    			//Aqui ele pega a mensagem do 'messages.properties'
+	    			//Aqui ele pega a mensagem lá do 'messages.properties'
 	    			String message = messageSource.getMessage(fieldError, 
 	    					LocaleContextHolder.getLocale());
+	    			
 	    			return Problema.Object.builder()
 	    				.name(fieldError.getField())
 	    				.userMessage(message)
@@ -263,13 +263,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	    
 	    return handleExceptionInternal(ex, problema, headers, status, request);
 	} 
-
+	
+	//Valida caso um ou mais campos estejam sendo passados de forma errada.
 	private ResponseEntity<Object> handleValidationInternal(Exception ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request, BindingResult bindingResult) {
 		TipoDoProblema tipoProblema = TipoDoProblema.DADOS_INVALIDOS;
-		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente."; 
 		
-		//BindingResult bindingResult = ex.getBindingResult();
 		List<Problema.Object> problemaFields = bindingResult.getAllErrors().stream()
 				.map(objectErros -> {
 					

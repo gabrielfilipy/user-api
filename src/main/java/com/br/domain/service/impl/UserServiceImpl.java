@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.br.domain.exception.EntidadeNaoExisteException;
 import com.br.domain.model.User;
 import com.br.domain.repository.UserRepository;
 import com.br.domain.service.UserService;
@@ -27,8 +28,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> findById(Long id) {
-		return userRepository.findById(id);
+	public User findById(Long id) {
+		Optional<User> user = userRepository.findById(id);
+		if(user.isEmpty()) {
+			throw new EntidadeNaoExisteException("Usuário informado não existe: " + id);
+		}
+		return user.get();
+	}
+
+	@Override
+	public Optional<User> findByMatricula(String matricula) {
+		return userRepository.findByMatricula(matricula);
 	}
 
 }

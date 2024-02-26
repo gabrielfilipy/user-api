@@ -1,6 +1,6 @@
 package com.br.domain.exception;
 
-public class RegraDeNegocioException extends RuntimeException{
+public class RegraDeNegocioException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

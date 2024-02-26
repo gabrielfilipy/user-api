@@ -2,17 +2,16 @@ package com.br.domain.model;
 
 import java.io.Serializable;
 
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 @Getter
 @Setter
 @Table(name = "TBL_USER")
@@ -25,6 +24,8 @@ public class User implements Serializable {
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank(message = "Nao pode ficar em branco")
+	@NotNull
 	@Column(name = "nome")
 	private String nome;
 	
@@ -32,7 +33,10 @@ public class User implements Serializable {
 	@Column(name = "password")
 	private String password;
 	
-	@Column(name = "login")
-	private String login;
+	@Column(name = "matricula")
+	private String matricula;
+	
+	@Column(name = "email")
+	private String email;
 
 }

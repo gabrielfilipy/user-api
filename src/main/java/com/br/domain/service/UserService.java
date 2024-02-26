@@ -9,6 +9,7 @@ public interface UserService {
 
 	User save(User user);
 	List<User> findAll();
-	Optional<User> findById(Long id);
+	User findById(Long id);
+	Optional<User> findByMatricula(String matricula);
 	
 }

@@ -24,6 +24,8 @@ public class User implements Serializable {
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private Boolean active;
+	
 	@NotBlank(message = "Nao pode ficar em branco")
 	@NotNull
 	@Column(name = "nome")

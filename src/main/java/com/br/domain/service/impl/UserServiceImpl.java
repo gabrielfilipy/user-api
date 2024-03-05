@@ -19,6 +19,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User save(User user) {
+		if(user.getId()==null)
+		user.setActive(true);
 		return userRepository.save(user);
 	}
 
@@ -37,8 +39,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> findByMatricula(String matricula) {
-		return userRepository.findByMatricula(matricula);
+	public User findByMatricula(String matricula) {
+		Optional <User> user = userRepository.findByMatricula(matricula);
+		if(user.isEmpty()) {
+			throw new EntidadeNaoExisteException("Matricula não existe: " + matricula);
+		}
+		return user.get();
 	}
 
+	@Override
+    public User deactivateUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        user.setActive(false);
+        return userRepository.save(user);
+	}
+
+	@Override
+	public User activateUser(Long id) {
+        User user= userRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoExisteException("Usuário não encontrado"));
+        user.setActive(true);
+        return userRepository.save(user);
+    }
 }

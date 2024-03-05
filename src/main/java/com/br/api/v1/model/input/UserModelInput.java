@@ -6,8 +6,7 @@ import lombok.*;
 @Setter
 public class UserModelInput {
 
-private String nome;
-	
+    private String nome;
 	private String password;
 	private String matricula;
 	private String email;

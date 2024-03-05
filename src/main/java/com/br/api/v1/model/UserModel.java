@@ -12,5 +12,6 @@ private String nome;
 	private String password;
 	private String matricula;
 	private String email;
+	private Long departmentId;
 	
 }

@@ -24,6 +24,8 @@ import com.br.api.v1.model.input.UserModelInput;
 import com.br.domain.exception.RegraDeNegocioException;
 import com.br.domain.model.User;
 import com.br.domain.service.UserService;
+import com.br.infrastructure.externalservice.rest.department.DepartmentFeignClient;
+import com.br.infrastructure.externalservice.rest.department.model.Department;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,6 +48,7 @@ public class UserController {
 	
 	@Autowired
 	private UserEditModelMapperBack userEditModelMapperBack;
+	private DepartmentFeignClient departmentFeignClient;
 	
 	@ApiOperation("Retorna uma lista de usuários.")
     @ApiResponses({
@@ -54,6 +57,7 @@ public class UserController {
     })
 	@GetMapping("/listar")
 	public ResponseEntity<List<User>> getUsers() {
+		List<Department> departments = departmentFeignClient.getListar();
 		return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
 	}
 	

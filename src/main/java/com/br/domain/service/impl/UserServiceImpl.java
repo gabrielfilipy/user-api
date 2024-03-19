@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User save(User user) {
+<<<<<<< HEAD
 		Department department = departmentFeignClient.getDepartment(user.getDepartmentId());
 		User userSave = userRepository.save(user);
 		String matricula = getMatricula(department, userSave.getId());
@@ -62,6 +63,11 @@ public class UserServiceImpl implements UserService {
         String nomeDepartamento = primeiraPalavra + ultimaPalavra;
         generator.sigla(id);
 		return generator.getSigla(nomeDepartamento);
+=======
+		if(user.getId()==null)
+		user.setActive(true);
+		return userRepository.save(user);
+>>>>>>> 1f5c5d5fb8a7b1d836144fe2e4f2cb7cd68c7d70
 	}
 
 	@Override
@@ -79,8 +85,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> findByMatricula(String matricula) {
-		return userRepository.findByMatricula(matricula);
+	public User findByMatricula(String matricula) {
+		Optional <User> user = userRepository.findByMatricula(matricula);
+		if(user.isEmpty()) {
+			throw new EntidadeNaoExisteException("Matricula não existe: " + matricula);
+		}
+		return user.get();
 	}
 
+	@Override
+    public User deactivateUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        user.setActive(false);
+        return userRepository.save(user);
+	}
+
+	@Override
+	public User activateUser(Long id) {
+        User user= userRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoExisteException("Usuário não encontrado"));
+        user.setActive(true);
+        return userRepository.save(user);
+    }
 }

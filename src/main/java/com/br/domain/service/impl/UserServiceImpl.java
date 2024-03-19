@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User save(User user) {
-<<<<<<< HEAD
 		Department department = departmentFeignClient.getDepartment(user.getDepartmentId());
 		User userSave = userRepository.save(user);
 		String matricula = getMatricula(department, userSave.getId());
@@ -63,11 +62,6 @@ public class UserServiceImpl implements UserService {
         String nomeDepartamento = primeiraPalavra + ultimaPalavra;
         generator.sigla(id);
 		return generator.getSigla(nomeDepartamento);
-=======
-		if(user.getId()==null)
-		user.setActive(true);
-		return userRepository.save(user);
->>>>>>> 1f5c5d5fb8a7b1d836144fe2e4f2cb7cd68c7d70
 	}
 
 	@Override

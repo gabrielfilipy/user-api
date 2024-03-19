@@ -38,5 +38,8 @@ public class User implements Serializable {
 	
 	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "department_id")
+	private Long departmentId;
 
 }

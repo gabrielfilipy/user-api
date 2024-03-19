@@ -6,20 +6,62 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.br.core.config.Generator;
 import com.br.domain.exception.EntidadeNaoExisteException;
 import com.br.domain.model.User;
 import com.br.domain.repository.UserRepository;
 import com.br.domain.service.UserService;
+import com.br.infrastructure.externalservice.rest.department.DepartmentFeignClient;
+import com.br.infrastructure.externalservice.rest.department.model.Department;
+import com.br.infrastructure.externalservice.rest.notification.NotificationFeignClient;
+import com.br.infrastructure.externalservice.rest.notification.model.Mensagem;
 
 @Service
 public class UserServiceImpl implements UserService {
+	
+	private static final int TAMANHO_SENHA = 8;
 
 	@Autowired 
 	private UserRepository userRepository;
 	
+	@Autowired
+	private DepartmentFeignClient departmentFeignClient;
+	
+	@Autowired
+	private NotificationFeignClient notificationFeignClient;
+	
+	@Autowired
+	private Generator generator;
+	
 	@Override
 	public User save(User user) {
-		return userRepository.save(user);
+		Department department = departmentFeignClient.getDepartment(user.getDepartmentId());
+		User userSave = userRepository.save(user);
+		String matricula = getMatricula(department, userSave.getId());
+		String password = generator.password(TAMANHO_SENHA);
+		userSave.setMatricula(matricula);
+		userSave.setPassword(password);
+		userSave = userRepository.save(userSave);
+		
+		notificationFeignClient.registryUser(new Mensagem(
+				user.getEmail(), 
+				matricula, 
+				password, 
+				user.getNome())
+				);
+		
+		return userSave;
+	}
+
+	private String getMatricula(Department department, Long id) {
+		String nomeCompleto = department.getNome();
+		String[] palavras = nomeCompleto.split("\\s+");
+        int indiceUltimaPalavra = palavras.length - 1;
+        String ultimaPalavra = palavras[indiceUltimaPalavra].substring(0,  2);
+        String primeiraPalavra = nomeCompleto.substring(0,  2);
+        String nomeDepartamento = primeiraPalavra + ultimaPalavra;
+        generator.sigla(id);
+		return generator.getSigla(nomeDepartamento);
 	}
 
 	@Override

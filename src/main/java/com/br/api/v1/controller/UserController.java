@@ -6,32 +6,18 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
-import com.br.api.v1.mapper.UserModelMapper;
-import com.br.api.v1.mapper.UserModelMapperBack;
-import com.br.api.v1.model.UserMatriculaModel;
-import com.br.api.v1.model.UserModel;
+import com.br.api.v1.mapper.*;
+import com.br.api.v1.model.*;
 import com.br.api.v1.model.input.UserModelInput;
-import com.br.domain.exception.EntidadeNaoExisteException;
-import com.br.domain.exception.RegraDeNegocioException;
 import com.br.domain.model.User;
 import com.br.domain.service.UserService;
 import com.br.infrastructure.externalservice.rest.department.DepartmentFeignClient;
 import com.br.infrastructure.externalservice.rest.department.model.Department;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 
 @Api(tags = "User")
 @RestController
@@ -47,9 +33,6 @@ public class UserController {
 	@Autowired
 	private UserModelMapperBack userModelMapperBack;
 	
-	@Autowired
-	private DepartmentFeignClient departmentFeignClient;
-	
 	@ApiOperation("Retorna uma lista de usuários.")
     @ApiResponses({
         @ApiResponse(code = 200, message = "Usuários listados sucesso."),
@@ -57,7 +40,6 @@ public class UserController {
     })
 	@GetMapping("/listar")
 	public ResponseEntity<List<User>> getUsers() {
-		List<Department> departments = departmentFeignClient.getListar();
 		return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
 	}
 	
@@ -69,25 +51,18 @@ public class UserController {
 	
 	@GetMapping("/buscar/{matricula}/matricula")
 	public ResponseEntity<UserMatriculaModel> getUser(@PathVariable(name = "matricula") String matricula) {
-		try {
-			Optional<User> user = userService.findByMatricula(matricula);
-			UserMatriculaModel userMatriculaModel = 
+		Optional<User> user = userService.findByMatricula(matricula);
+		UserMatriculaModel userMatriculaModel = 
 					userModelMapper.toModelMatricula(user.get());
-			return ResponseEntity.status(HttpStatus.OK).body(userMatriculaModel);
-		} catch(Exception ex) {
-			throw new EntidadeNaoExisteException("Usuario nao encontrado...");
-		}
+		return ResponseEntity.status(HttpStatus.OK).body(userMatriculaModel);
 	}
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<UserModel> cadastrar(@RequestBody @Valid UserModelInput userModelInput) {
-		try {
-			User user = userModelMapperBack.toModel(userModelInput);
-			UserModel userModel = userModelMapper.toModel(userService.save(user));
-			return ResponseEntity.status(HttpStatus.CREATED).body(userModel);
-		} catch(Exception ex) {
-			throw new RegraDeNegocioException(ex.getMessage(), ex);
-		}
+	public ResponseEntity<UserModel> cadastrar(@RequestBody @Valid 
+		UserModelInput userModelInput) {
+		User user = userModelMapperBack.toModel(userModelInput);
+		UserModel userModel = userModelMapper.toModel(userService.save(user));
+		return ResponseEntity.status(HttpStatus.CREATED).body(userModel);
 	}
 	
 	@PutMapping("/editar/{id}")

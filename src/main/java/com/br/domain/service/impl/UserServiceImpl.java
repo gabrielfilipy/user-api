@@ -79,6 +79,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User findByEmail(String email) {
+		Optional<User> user = userRepository.findByEmail(email);
+		if(user.isEmpty()) {
+			throw new EntidadeNaoExisteException("E-mail informado nao existe: " + email);
+		}
+		return user.get();
+	}
+	
+	@Override
 	public User findByMatricula(String matricula) {
 		Optional <User> user = userRepository.findByMatricula(matricula);
 		if(user.isEmpty()) {
@@ -102,4 +111,5 @@ public class UserServiceImpl implements UserService {
         user.setActive(true);
         return userRepository.save(user);
     }
+
 }

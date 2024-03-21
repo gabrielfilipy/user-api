@@ -11,5 +11,6 @@ import com.br.domain.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findByMatricula(String matricula);
+	Optional<User> findByEmail(String email);
 
 }

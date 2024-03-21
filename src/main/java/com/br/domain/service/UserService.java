@@ -9,6 +9,7 @@ public interface UserService {
 	List<User> findAll();
 	User findById(Long id);
 	User findByMatricula(String matricula);
+	User findByEmail(String email);
 	User deactivateUser(Long id);
 	User activateUser(Long id);
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.br.api.v1.model.CodeValidateModel;
+import com.br.domain.model.CodeValidate;
 
 @Component
 public class CodeValidateModelMapper {
@@ -12,9 +13,9 @@ public class CodeValidateModelMapper {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	public CodeValidateModel toModel(CodeValidateModel codeValidateModel) {
+	public CodeValidateModel toModel(CodeValidate codeValidate) {
 		CodeValidateModel codeValidateModelnew = 
-				modelMapper.map(codeValidateModel, CodeValidateModel.class);
+				modelMapper.map(codeValidate, CodeValidateModel.class);
 		return codeValidateModelnew;
 	}
 }

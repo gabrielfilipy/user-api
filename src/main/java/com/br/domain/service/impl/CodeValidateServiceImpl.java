@@ -1,19 +1,13 @@
 package com.br.domain.service.impl;
-
-import javax.management.Notification;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.br.core.config.Generator;
-import com.br.domain.model.CodeValidate;
-import com.br.domain.model.User;
+import com.br.domain.model.*;
 import com.br.domain.repository.CodeValidateRepository;
-import com.br.domain.service.CodeValidateService;
-import com.br.domain.service.UserService;
+import com.br.domain.service.*;
 import com.br.infrastructure.externalservice.rest.notification.NotificationFeignClient;
 import com.br.infrastructure.externalservice.rest.notification.model.CodeMessage;
-import com.br.infrastructure.externalservice.rest.notification.model.Mensagem;
+
 
 @Service
 public class CodeValidateServiceImpl implements CodeValidateService {
@@ -49,6 +43,24 @@ public class CodeValidateServiceImpl implements CodeValidateService {
 				);
 		
 		return true;
-	}
+	  }
 
+	@Override
+	public CodeValidate findByCode(String code) {
+		CodeValidate codeValidate = codeValidateRepository.findByCode(code);
+        if (codeValidate != null) {
+            User user = codeValidate.getUser();
+            if (user != null) {
+            	String matricula = user.getMatricula();                
+                user = userService.findByMatricula(matricula);
+                
+                codeValidate.setCode(code);
+                codeValidate.setUser(user);
+
+                return codeValidate;
+            }
+        }
+        return null;
+    }
 }
+	 

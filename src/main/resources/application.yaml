@@ -9,6 +9,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+   
       
 auth:
-  username:  
+  jwtSecret:  817cff65-0402-46fb-ba27-7c6809959fd1
+  jwtExpiration: 30000

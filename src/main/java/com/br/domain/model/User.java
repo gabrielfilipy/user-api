@@ -1,11 +1,14 @@
 package com.br.domain.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.Getter;
@@ -43,5 +46,12 @@ public class User implements Serializable {
 	
 	@Column(name = "department_id")
 	private Long departmentId;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "TBL_USERS_ROLES",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
 }

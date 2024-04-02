@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
 		userSave.setPassword(passwordEncode);
 		userSave.getRoles().add(role);
 		userSave = userRepository.save(userSave);
-		
 		notificationFeignClient.registryUser(new Mensagem(
 				user.getEmail(), 
 				matricula, 

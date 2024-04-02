@@ -25,7 +25,7 @@ public class UserDatailServiceImpl implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = userRepository.findByNome(userName)
+		User user = userRepository.findByMatricula(userName)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found white name: " + userName));
 		return UserDatailImpl.build(user);
 	}

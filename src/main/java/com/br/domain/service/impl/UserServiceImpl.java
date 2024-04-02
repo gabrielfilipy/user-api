@@ -7,6 +7,7 @@ import com.br.domain.enums.RoleType;
 import com.br.domain.model.Role;
 import com.br.domain.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.br.core.config.Generator;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
 	private Generator generator;
 
 	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
 	private RoleService roleService;
 	
 	@Override
@@ -45,12 +49,11 @@ public class UserServiceImpl implements UserService {
 		User userSave = userRepository.save(user);
 		String matricula = getMatricula(department, userSave.getId());
 		String password = generator.password(TAMANHO_SENHA);
-
 		Role role = roleService.findByRoleName(RoleType.ROLE_FUNCIONARIO)
 				.orElseThrow(() -> new RuntimeException("Error: Permissão 'ROLE_FUNCIONARIO´  não existe."));
-
+		String passwordEncode = passwordEncoder.encode(password);
 		userSave.setMatricula(matricula);
-		userSave.setPassword(password);
+		userSave.setPassword(passwordEncode);
 		userSave.getRoles().add(role);
 		userSave = userRepository.save(userSave);
 		

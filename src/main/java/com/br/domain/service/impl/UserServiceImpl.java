@@ -3,6 +3,9 @@ package com.br.domain.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.br.domain.enums.RoleType;
+import com.br.domain.model.Role;
+import com.br.domain.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +35,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private Generator generator;
+
+	@Autowired
+	private RoleService roleService;
 	
 	@Override
 	public User save(User user) {
@@ -39,8 +45,13 @@ public class UserServiceImpl implements UserService {
 		User userSave = userRepository.save(user);
 		String matricula = getMatricula(department, userSave.getId());
 		String password = generator.password(TAMANHO_SENHA);
+
+		Role role = roleService.findByRoleName(RoleType.ROLE_FUNCIONARIO)
+				.orElseThrow(() -> new RuntimeException("Error: Permissão 'ROLE_FUNCIONARIO´  não existe."));
+
 		userSave.setMatricula(matricula);
 		userSave.setPassword(password);
+		userSave.getRoles().add(role);
 		userSave = userRepository.save(userSave);
 		
 		notificationFeignClient.registryUser(new Mensagem(
@@ -89,7 +100,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User findByMatricula(String matricula) {
-		Optional <User> user = userRepository.findByMatricula(matricula);
+		Optional <User> user = userRepository.findByMatriculaSearch(matricula);
 		if(user.isEmpty()) {
 			throw new EntidadeNaoExisteException("Matricula não existe: " + matricula);
 		}

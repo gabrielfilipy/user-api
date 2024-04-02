@@ -68,7 +68,7 @@ public class UserDatailImpl implements UserDetails{
 
 	@Override
 	public String getUsername() { 
-		return this.nome;
+		return this.matricula;
 	}
 	
 	@Override

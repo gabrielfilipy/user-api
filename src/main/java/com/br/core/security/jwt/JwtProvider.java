@@ -12,7 +12,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtProvider {
-	
+
+    @Value("${auth.jwtSecret}")
+    private String assinatura;
+
+    @Value("${auth.jwtExpiration}")
+    private String expiracao;
 
     public String geraTokenJWT(Authentication authentication) {
         UserDatailImpl userPrincipal = (UserDatailImpl) authentication.getPrincipal();
@@ -25,18 +30,18 @@ public class JwtProvider {
                 .setSubject((userPrincipal.getId().toString()))
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + "30000"))
-                .signWith(SignatureAlgorithm.HS512, "123")
+                .setExpiration(new Date((new Date()).getTime() + expiracao))
+                .signWith(SignatureAlgorithm.HS512, assinatura)
                 .compact();
     }
 
     public String getSubjectJwt(String token) {
-        return Jwts.parser().setSigningKey("123").parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(assinatura).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwt(String authToken) {
         try {
-            Jwts.parser().setSigningKey("123").parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(assinatura).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             System.out.println("Assinatura do token inválida!");

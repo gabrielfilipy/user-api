@@ -45,7 +45,8 @@ public class WebSecurityConfig {
 	
 	
     private static  final String[] AUTH_WIHTELIST = {
-            "/auth/**"
+            "/v1/auth/**",
+            "/v1/user/**"
     };
 
     @Bean

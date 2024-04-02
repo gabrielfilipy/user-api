@@ -24,8 +24,10 @@ public class UserDatailServiceImpl implements UserDetailsService{
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return null;
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		User user = userRepository.findByNome(userName)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found white name: " + userName));
+		return UserDatailImpl.build(user);
 	}
 
 }

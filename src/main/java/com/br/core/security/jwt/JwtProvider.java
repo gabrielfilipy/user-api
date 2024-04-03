@@ -17,7 +17,7 @@ public class JwtProvider {
     private String assinatura;
 
     @Value("${auth.jwtExpiration}")
-    private String expiracao;
+    private int expiracao;
 
     public String geraTokenJWT(Authentication authentication) {
         UserDatailImpl userPrincipal = (UserDatailImpl) authentication.getPrincipal();
@@ -26,13 +26,14 @@ public class JwtProvider {
                     return role.getAuthority();
                 }).collect(Collectors.joining(","));
 
-        return Jwts.builder()
+        String roles1 = Jwts.builder()
                 .setSubject((userPrincipal.getId().toString()))
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + expiracao))
                 .signWith(SignatureAlgorithm.HS512, assinatura)
                 .compact();
+        return roles1;
     }
 
     public String getSubjectJwt(String token) {

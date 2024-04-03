@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class UserDatailImpl implements UserDetails{
 	
@@ -29,7 +30,8 @@ public class UserDatailImpl implements UserDetails{
 	private Boolean active;
 	
 	private String nome;
-	
+
+	@JsonIgnore
 	private String password;
 	
 	private String matricula;
@@ -58,7 +60,7 @@ public class UserDatailImpl implements UserDetails{
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.getAuthorities();
+		return authorities;
 	}
 	
 	@Override

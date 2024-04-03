@@ -28,12 +28,17 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtModel> authenticationUser(@Valid @RequestBody LoginModelInput loginModelInput) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginModelInput.getMatricula(), loginModelInput.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtProvider.geraTokenJWT(authentication);
-        return ResponseEntity.ok(new JwtModel(jwt));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginModelInput.getMatricula(), loginModelInput.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtProvider.geraTokenJWT(authentication);
+            return ResponseEntity.ok(new JwtModel(jwt));
+        }catch(IllegalArgumentException ex) {
+            ex.printStackTrace();
+            return null;
+            }
     }
 
 }

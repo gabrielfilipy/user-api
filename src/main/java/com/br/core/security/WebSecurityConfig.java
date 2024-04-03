@@ -1,10 +1,7 @@
 package com.br.core.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,14 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Component;
 
 @Component
-
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
-
-//	@Value("${auth.username}")
-//    private String username;
-//
-//    @Value("${auth.password}")
-//    private String password;
 	
 	@Autowired
 	private UserDatailServiceImpl userDatailService;
@@ -41,13 +32,17 @@ public class WebSecurityConfig {
 	@Autowired
 	private UserDatailServiceImpl userDatailServiceImpl;
 	
-	
-	
-	
     private static  final String[] AUTH_WIHTELIST = {
-            "/v1/auth/**",
-            "/v1/user/**"
+            "/v1/auth/**"
     };
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        String hierarchy = "ROLE_ADMIN > ROLE_GESTOR \n ROLE_FUNCIONARIO > ROLE_ESTAGIARIO";
+        roleHierarchy.setHierarchy(hierarchy);
+        return roleHierarchy;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

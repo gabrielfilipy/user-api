@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
 		Role role = roleService.findByRoleName(RoleType.ROLE_FUNCIONARIO)
 				.orElseThrow(() -> new RuntimeException("Error: Permissão 'ROLE_FUNCIONARIO´  não existe."));
 		String passwordEncode = passwordEncoder.encode(password);
+		System.out.println(">>>>>>>>>>>>>>>>> " + password);
 		userSave.setMatricula(matricula);
 		userSave.setPassword(passwordEncode);
 		userSave.getRoles().add(role);

@@ -21,6 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findById(Long userId);
 
 	@EntityGraph(attributePaths = "roles", type = EntityGraph.EntityGraphType.FETCH)
-	Optional<User> findByMatricula(String nome);
+	Optional<User> findByMatricula(String matricula);
 
 }

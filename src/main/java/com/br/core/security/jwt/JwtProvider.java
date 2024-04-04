@@ -29,6 +29,8 @@ public class JwtProvider {
         String roles1 = Jwts.builder()
                 .setSubject((userPrincipal.getId().toString()))
                 .claim("roles", roles)
+                .claim("nome", userPrincipal.getNome())
+                .claim("matricula", userPrincipal.getMatricula())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + expiracao))
                 .signWith(SignatureAlgorithm.HS512, assinatura)

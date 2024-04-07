@@ -31,11 +31,11 @@ public class CodeValidateController {
 		codeValidateEmailNew.setValido(isSave);
 		return ResponseEntity.status(HttpStatus.CREATED).body(codeValidateEmailNew);
 	}
-//	@GetMapping("/user-validate/{code}")
-//	public ResponseEntity<CodeValidateModel> codeValidate(@PathVariable(name = "code") String code) {
-//		CodeValidate codeValidate  ;
-//		CodeValidateModel codeValidateModel = 
-//				codeValidateModelMapper.toModel(codeValidate);
-//		return ResponseEntity.status(HttpStatus.OK).body(codeValidateModel);
-//	}
+	@GetMapping("/code-validate/{code}")
+	public ResponseEntity<CodeValidateModel> codeValidate(@PathVariable(name = "code") String code) {
+		CodeValidate codeValidate = codeValidateService.findByCode(code) ;
+		CodeValidateModel codeValidateModel = 
+				codeValidateModelMapper.toModel(codeValidate);
+		return ResponseEntity.status(HttpStatus.OK).body(codeValidateModel);
+	}
 }

@@ -7,6 +7,7 @@ import com.br.domain.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,5 +20,10 @@ public class RoleServiceImpl implements RoleService {
     public Optional<Role> findByRoleName(RoleType name) {
         return rolerRepository.findByRoleType(name);
     }
+
+	@Override
+	public List<Role> findAll() {
+		return rolerRepository.findAll();
+	}
 
 }

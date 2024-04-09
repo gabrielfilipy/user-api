@@ -60,7 +60,7 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.OK).body(userMatriculaModel);
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
+	//@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
 	@PostMapping("/cadastrar")
 	public ResponseEntity<UserModel> cadastrar(@RequestBody @Valid 
 		UserModelInput userModelInput) {

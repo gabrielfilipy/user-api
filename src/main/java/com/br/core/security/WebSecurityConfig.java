@@ -33,7 +33,8 @@ public class WebSecurityConfig {
 	private UserDatailServiceImpl userDatailServiceImpl;
 	
     private static  final String[] AUTH_WIHTELIST = {
-            "/v1/auth/**"
+            "/v1/auth/**",
+            "/v1/user/**"
     };
 
     @Bean

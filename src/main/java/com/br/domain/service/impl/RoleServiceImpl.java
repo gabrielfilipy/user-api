@@ -17,6 +17,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Optional<Role> findByRoleName(RoleType name) {
+        Role roleNew = new Role();
+        Optional<Role> role = rolerRepository.findByRoleType(name);
+        //TODO: Melhorar essa implementação fazendo com que ele insira uma nova ROLE caso ela não exista.
+        if(role.isEmpty()) {
+            roleNew.setRoleType(RoleType.ROLE_FUNCIONARIO);
+            rolerRepository.save(roleNew);
+        }
         return rolerRepository.findByRoleType(name);
     }
 

@@ -14,9 +14,7 @@ public class UserModelMapperBack {
 	private ModelMapper modelMapper;
 	
 	public User toModel(UserModelInput userModelInput) {
-		User user = 
-				modelMapper.map(userModelInput, User.class);
-		return user;
+		return modelMapper.map(userModelInput, User.class);
 	}
 	
 }

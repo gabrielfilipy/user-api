@@ -62,8 +62,7 @@ public class UserController {
 
 	//@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
 	@PostMapping("/cadastrar")
-	public ResponseEntity<UserModel> cadastrar(@RequestBody @Valid 
-		UserModelInput userModelInput) {
+	public ResponseEntity<UserModel> cadastrar(@RequestBody @Valid UserModelInput userModelInput) {
 		User user = userModelMapperBack.toModel(userModelInput);
 		UserModel userModel = userModelMapper.toModel(userService.save(user));
 		return ResponseEntity.status(HttpStatus.CREATED).body(userModel);

@@ -16,6 +16,7 @@ import com.br.domain.service.UserService;
 
 import io.swagger.annotations.*;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Api(tags = "User")
 @RestController
 @RequestMapping("/v1/user")

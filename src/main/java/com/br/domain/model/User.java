@@ -44,6 +44,21 @@ public class User implements Serializable {
 	@Column(name = "email")
 	private String email;
 	
+	@Column(name = "CPF")
+	private Long cpf;
+	
+	@Column(name = "RG")
+	private Long rg;
+	
+	@Column(name = "Endereco")
+	private String endereco;
+	
+	@Column(name = "Data_Nascimento")
+	private Long nascimento;
+	
+	@Column(name = "Telefone")
+	private Long telefone;
+	
 	@Column(name = "department_id")
 	private Long departmentId;
 	

@@ -69,14 +69,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private String getMatricula(Department department, Long id) {
-		String nomeCompleto = department.getNome();
-		String[] palavras = nomeCompleto.split("\\s+");
-        int indiceUltimaPalavra = palavras.length - 1;
-        String ultimaPalavra = palavras[indiceUltimaPalavra].substring(0,  2);
-        String primeiraPalavra = nomeCompleto.substring(0,  2);
-        String nomeDepartamento = primeiraPalavra + ultimaPalavra;
         generator.sigla(id);
-		return generator.getSigla(nomeDepartamento);
+		return generator.getSigla(department.getSigla());
 	}
 
 	@Override

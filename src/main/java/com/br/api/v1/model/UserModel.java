@@ -9,7 +9,6 @@ public class UserModel {
 	private String nome;
 	private Boolean active;
     private Long id;
-	private String password;
 	private String matricula;
 	private String email;
 	private Long cpf;

@@ -1,8 +1,12 @@
 package com.br.api.v1.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 
+import com.br.infrastructure.externalservice.rest.department.DepartmentFeignClient;
+import com.br.infrastructure.externalservice.rest.department.mapper.DepartmentModelMapper;
+import com.br.infrastructure.externalservice.rest.department.model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +37,12 @@ public class UserController {
 	
 	@Autowired
 	private UserEditModelMapperBack userEditModelMapperBack;
+
+	@Autowired
+	private DepartmentFeignClient departmentFeignClient;
+
+	@Autowired
+	private DepartmentModelMapper departmentModelMapper;
 	
 	@ApiOperation("Retorna uma lista de usuários.")
     @ApiResponses({
@@ -41,8 +51,21 @@ public class UserController {
     })
 	@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
 	@GetMapping("/listar")
-	public ResponseEntity<List<User>> getUsers() {
-		return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
+	public ResponseEntity<List<UserDepartmentModel>> getUsers() {
+		UserDepartmentModel userDepartmentModel;
+		List<UserDepartmentModel> userDepartmentModels = new ArrayList<>();
+		List<User> users =  userService.findAll();
+		for(User user: users) {
+			UserModel userModel = userModelMapper.toModel(user);
+			Department department = departmentFeignClient.getDepartment(user.getDepartmentId());
+			DepartmentModel departmentModel = departmentModelMapper.toModel(department);
+			userDepartmentModel = new UserDepartmentModel();
+			userDepartmentModel.setUserModel(userModel);
+			userDepartmentModel.setDepartment(departmentModel);
+			userDepartmentModels.add(userDepartmentModel);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(userDepartmentModels);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")

@@ -1,13 +1,21 @@
 package com.br.api.v1.controller;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.validation.Valid;
 
 import com.br.infrastructure.externalservice.rest.department.DepartmentFeignClient;
 import com.br.infrastructure.externalservice.rest.department.mapper.DepartmentModelMapper;
 import com.br.infrastructure.externalservice.rest.department.model.Department;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -49,24 +57,27 @@ public class UserController {
         @ApiResponse(code = 200, message = "Usuários listados sucesso."),
         @ApiResponse(code = 500, message = "Ocorreu um erro interno.")
     })
+	
 	@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
 	@GetMapping("/listar")
-	public ResponseEntity<List<UserDepartmentModel>> getUsers() {
-		UserDepartmentModel userDepartmentModel;
-		List<UserDepartmentModel> userDepartmentModels = new ArrayList<>();
-		List<User> users =  userService.findAll();
-		for(User user: users) {
-			UserModel userModel = userModelMapper.toModel(user);
-			Department department = departmentFeignClient.getDepartment(user.getDepartmentId());
-			DepartmentModel departmentModel = departmentModelMapper.toModel(department);
-			userDepartmentModel = new UserDepartmentModel();
-			userDepartmentModel.setUserModel(userModel);
-			userDepartmentModel.setDepartment(departmentModel);
-			userDepartmentModels.add(userDepartmentModel);
-		}
+	public ResponseEntity<Page<UserDepartmentModel>> getUsers() {
+	    Page<User> usersPage = userService.findAll(Pageable.unpaged());
+	    List<UserDepartmentModel> userDepartmentModels = new ArrayList<>();
+	    for (User user : usersPage.getContent()) {
+	        UserModel userModel = userModelMapper.toModel(user);
+	        Department department = departmentFeignClient.getDepartment(user.getDepartmentId());
+	        DepartmentModel departmentModel = departmentModelMapper.toModel(department);
 
-		return ResponseEntity.status(HttpStatus.OK).body(userDepartmentModels);
+	        UserDepartmentModel userDepartmentModel = new UserDepartmentModel();
+	        userDepartmentModel.setUserModel(userModel);
+	        userDepartmentModel.setDepartment(departmentModel);
+	        userDepartmentModels.add(userDepartmentModel);
+	    }
+
+	    Page<UserDepartmentModel> userDepartmentPage = new PageImpl<>(userDepartmentModels, usersPage.getPageable(), usersPage.getTotalElements());
+	    return ResponseEntity.ok().body(userDepartmentPage);
 	}
+
 
 	@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
 	@GetMapping("/buscar/{id}")

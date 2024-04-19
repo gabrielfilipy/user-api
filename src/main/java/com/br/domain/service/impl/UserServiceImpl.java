@@ -118,9 +118,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User activaUser(Long id, Boolean active) {
 			User user = userRepository.findById(id)
-		                .orElseThrow(() -> new RuntimeException("Departamento não encontrado."));
+		                .orElseThrow(() -> new RuntimeException("Usuario não encontrado."));
 			user.setActive(active);
 		return userRepository.save(user);
 	}
+	
 
 }

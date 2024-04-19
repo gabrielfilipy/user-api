@@ -15,4 +15,5 @@ public interface UserService {
 	User findByEmail(String email);
 	User deactivateUser(Long id);
 	User activaUser(Long id, Boolean active);
+
 }

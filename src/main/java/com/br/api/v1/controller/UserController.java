@@ -15,13 +15,15 @@ import com.br.infrastructure.externalservice.rest.department.model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.br.api.v1.model.input.UserActiveModelInput;
 import com.br.api.v1.model.input.UserModelInput;
-import com.br.api.v1.mapper.*;
+import com.br.api.v1.mapper.UserEditModelMapperBack;
+import com.br.api.v1.mapper.UserModelMapper;
+import com.br.api.v1.mapper.UserModelMapperBack;
 import com.br.api.v1.model.*;
 import com.br.domain.model.User;
 import com.br.domain.service.UserService;
@@ -111,14 +113,12 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(userModelMapper.toModel(userService.save(userAtual)));
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
-	@PutMapping("/ativar/{id}")
-    public ResponseEntity<UserModel> activateUser(@RequestBody UserModelInput userModelInput ,
-    		@PathVariable (name = "id") Long id) {
-		User user = userService.findById(id);
-		userEditModelMapperBack.copyToDomainObject(userModelInput, user);
-		return ResponseEntity.status(HttpStatus.CREATED).body(userModelMapper.toModel(userService.activateUser(id)));
-	}
+	@PatchMapping("/ativar-desativar/{id}")
+    public ResponseEntity<UserModel> activateUser(@RequestBody UserActiveModelInput userActiveModelInput,
+																  @PathVariable(name = "id") Long id ) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(
+				userModelMapper.toModel(userService.activaUser(id, userActiveModelInput.isActive())));
+ 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
     @PutMapping("/desativar/{id}")

@@ -116,11 +116,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User activateUser(Long id) {
-        User user= userRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoExisteException("Usuário não encontrado"));
-        user.setActive(true);
-        return userRepository.save(user);
-    }
+	public User activaUser(Long id, Boolean active) {
+			User user = userRepository.findById(id)
+		                .orElseThrow(() -> new RuntimeException("Usuario não encontrado."));
+			user.setActive(active);
+		return userRepository.save(user);
+	}
+	
 
 }

@@ -1,5 +1,6 @@
 package com.br.api.v1.controller;
 
+import com.br.domain.repository.spec.TemplateSpec;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import com.br.infrastructure.externalservice.rest.department.model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -61,8 +63,9 @@ public class UserController {
     })
 
 	@GetMapping("/listar")
-	public ResponseEntity<Page<UserDepartmentModel>> getUsers() {
-	    Page<User> usersPage = userService.findAll(Pageable.unpaged());
+	public ResponseEntity<Page<UserDepartmentModel>> getUsers(TemplateSpec.UserSpec spec,
+															  @PageableDefault(page = 0, size = 5) Pageable pageable) {
+	    Page<User> usersPage = userService.findAll(spec, Pageable.unpaged());
 	    List<UserDepartmentModel> userDepartmentModels = new ArrayList<>();
 	    for (User user : usersPage.getContent()) {
 	        UserModel userModel = userModelMapper.toModel(user);
@@ -78,14 +81,14 @@ public class UserController {
 	}
 
 
-	@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
+	//@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
 	@GetMapping("/buscar/{id}")
 	public ResponseEntity<User> getUser(@PathVariable(name = "id") Long id) {
 		User user = userService.findById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(user);
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
+	//@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
 	@GetMapping("/buscar/{matricula}/matricula")
 	public ResponseEntity<UserMatriculaModel> getUser(@PathVariable(name = "matricula") String matricula) {
 		User user = userService.findByMatricula(matricula);
@@ -102,7 +105,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(userModel);
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
+	//@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
 	@PutMapping("/editar/{id}")
 	public ResponseEntity<UserModel> editar(@RequestBody UserModelInput userModelInput, 
 			@PathVariable(name = "id") Long id) {
@@ -118,7 +121,7 @@ public class UserController {
 				userModelMapper.toModel(userService.activaUser(id, userActiveModelInput.isActive())));
  	}
 
-	@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
+	//@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
     @PutMapping("/desativar/{id}")
     public ResponseEntity<UserModel> deactivateUser( @RequestBody UserModelInput userModelInput, 
     		@PathVariable (name = "id") Long id) {

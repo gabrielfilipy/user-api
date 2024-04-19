@@ -5,11 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.br.domain.model.User;
+import org.springframework.data.jpa.domain.Specification;
 
 public interface UserService {
 
 	User save(User user);
-	Page<User> findAll(Pageable pageable);
+	Page<User> findAll(Specification<User> spec, Pageable pageable);
 	User findById(Long id);
 	User findByMatricula(String matricula);
 	User findByEmail(String email);

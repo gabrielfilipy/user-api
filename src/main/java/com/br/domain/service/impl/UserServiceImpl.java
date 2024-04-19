@@ -9,6 +9,7 @@ import com.br.domain.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -76,8 +77,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<User> findAll(Pageable pageable) {
-		return userRepository.findAll(pageable);
+	public Page<User> findAll(Specification<User> spec, Pageable pageable) {
+		return userRepository.findAll(spec, pageable);
 	}
 
 	@Override

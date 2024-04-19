@@ -12,5 +12,9 @@ public class UserModelInput {
 	private String matricula;
 	private String email;
 	private Long departmentId;
-	
+	private String telefone;
+	private String endereco;
+	private String rg;
+	private String cpf;
+
 }

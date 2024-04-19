@@ -46,6 +46,18 @@ public class User implements Serializable {
 	
 	@Column(name = "department_id")
 	private Long departmentId;
+
+	@Column(name = "telefone")
+	private String telefone;
+
+	@Column(name = "endereco")
+	private String endereco;
+
+	@Column(name = "rg")
+	private String rg;
+
+	@Column(name = "cpf")
+	private String cpf;
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@ManyToMany(fetch = FetchType.LAZY)

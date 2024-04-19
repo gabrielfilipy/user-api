@@ -31,6 +31,7 @@ import com.br.domain.service.UserService;
 import io.swagger.annotations.*;
 
 @Api(tags = "User")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/v1/user")
 public class UserController {
@@ -58,8 +59,7 @@ public class UserController {
         @ApiResponse(code = 200, message = "Usuários listados sucesso."),
         @ApiResponse(code = 500, message = "Ocorreu um erro interno.")
     })
-	
-	@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
+
 	@GetMapping("/listar")
 	public ResponseEntity<Page<UserDepartmentModel>> getUsers() {
 	    Page<User> usersPage = userService.findAll(Pageable.unpaged());
@@ -74,9 +74,7 @@ public class UserController {
 	        userDepartmentModel.setDepartment(departmentModel);
 	        userDepartmentModels.add(userDepartmentModel);
 	    }
-
-	    Page<UserDepartmentModel> userDepartmentPage = new PageImpl<>(userDepartmentModels, usersPage.getPageable(), usersPage.getTotalElements());
-	    return ResponseEntity.ok().body(userDepartmentPage);
+	    return ResponseEntity.ok().body(new PageImpl<>(userDepartmentModels, usersPage.getPageable(), usersPage.getTotalElements()));
 	}
 
 

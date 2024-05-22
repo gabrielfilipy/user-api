@@ -16,6 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
 	@Query("FROM User WHERE matricula = :matricula")
 	Optional<User> findByMatriculaSearch(String matricula);
+
 	Optional<User> findByEmail(String email);
 
 	@EntityGraph(attributePaths = "roles", type = EntityGraph.EntityGraphType.FETCH)

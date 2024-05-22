@@ -8,5 +8,6 @@ import lombok.Setter;
 public class UserMatriculaModel {
 
 	private String matricula;
+	private String nome;
 	
 }

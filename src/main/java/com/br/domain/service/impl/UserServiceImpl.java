@@ -1,5 +1,6 @@
 package com.br.domain.service.impl;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -106,6 +108,23 @@ public class UserServiceImpl implements UserService {
 			throw new EntidadeNaoExisteException("Matricula não existe: " + matricula);
 		}
 		return user.get();
+	}
+	
+	@Override
+	public boolean BuscarMatriculaSenha(String matricula, String password) {
+	    Optional<User> userOp = userRepository.findByMatricula(matricula);
+	    if (userOp.isPresent()) {
+	        User user = userOp.get();
+	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	        if (passwordEncoder.matches(password, user.getPassword())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+    public String encodePasswordToBase64(String password) {
+	    return Base64.getEncoder().encodeToString(password.getBytes());
 	}
 
 	@Override

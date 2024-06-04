@@ -9,5 +9,6 @@ public class UserMatriculaModel {
 
 	private String matricula;
 	private String nome;
+	private Long id;
 	
 }

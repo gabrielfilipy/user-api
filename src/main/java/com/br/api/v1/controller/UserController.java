@@ -18,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.br.api.v1.model.input.UserActiveModelInput;
@@ -129,5 +128,11 @@ public class UserController {
 		userEditModelMapperBack.copyToDomainObject(userModelInput, user);
 		return ResponseEntity.status(HttpStatus.CREATED).body(userModelMapper.toModel(userService.deactivateUser(id)));
 	}
+    
+    @GetMapping("/filtro")
+    public ResponseEntity<Page<User>> getFiltro(String matricula, String nome ,Long departmentId,
+    											 @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.Filtro(matricula, nome, departmentId, pageable));
+    }
     
 }

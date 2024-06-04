@@ -12,7 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.br.domain.model.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User, Long>, 
+		JpaSpecificationExecutor<User>, UserRepositoryQuery{
 
 	@Query("FROM User WHERE matricula = :matricula")
 	Optional<User> findByMatriculaSearch(String matricula);

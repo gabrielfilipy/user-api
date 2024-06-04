@@ -123,6 +123,10 @@ public class UserServiceImpl implements UserService {
 			user.setActive(active);
 		return userRepository.save(user);
 	}
-	
 
+	@Override
+	public Page<User> Filtro(String matricula, String nome, Long departmentId, Pageable pageable) {
+		return userRepository.Filtro(matricula, nome, departmentId, pageable);
+	}
+	
 }

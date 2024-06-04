@@ -3,6 +3,8 @@ package com.br.api.v1.controller;
 import com.br.api.v1.model.JwtModel;
 import com.br.api.v1.model.input.LoginModelInput;
 import com.br.core.security.jwt.JwtProvider;
+import com.br.domain.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,9 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<JwtModel> authenticationUser(@Valid @RequestBody LoginModelInput loginModelInput) {
@@ -37,6 +42,18 @@ public class AuthController {
             ex.printStackTrace();
             return null;
             }
+    }
+    
+    
+    
+    @PostMapping("/Autenticação")
+    public ResponseEntity<Boolean> authenticate(@RequestBody LoginModelInput loginModelInput) {
+        boolean isAuthenticated = userService.BuscarMatriculaSenha(loginModelInput.getMatricula(), loginModelInput.getPassword());
+        if (isAuthenticated) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.status(401).body(false);
+        }
     }
 
 }

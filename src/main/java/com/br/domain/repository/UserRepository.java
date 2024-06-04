@@ -1,7 +1,6 @@
 package com.br.domain.repository;
 
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.br.domain.model.User;
+
+import feign.Param;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
@@ -24,5 +25,8 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
 	@EntityGraph(attributePaths = "roles", type = EntityGraph.EntityGraphType.FETCH)
 	Optional<User> findByMatricula(String matricula);
+
+	@Query("FROM User WHERE matricula = :matricula AND password = :password")
+	Optional<User> findByMatriculaAndPassword(@Param("matricula") String matricula, @Param("password") String password);
 
 }

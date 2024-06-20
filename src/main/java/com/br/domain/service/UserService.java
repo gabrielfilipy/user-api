@@ -1,9 +1,7 @@
 package com.br.domain.service;
 
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import com.br.domain.model.User;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -16,5 +14,6 @@ public interface UserService {
 	User findByEmail(String email);
 	User deactivateUser(Long id);
 	User activaUser(Long id, Boolean active);
+	Page<User> Filtro(String matricula, String nome ,Long departmentId, Pageable pageable);
 
 }

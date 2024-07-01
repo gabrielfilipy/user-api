@@ -11,7 +11,8 @@ public class TemplateSpec {
 
     @And({
             @Spec(path = "nome", spec = Like.class),
-            @Spec(path = "sigla", spec = Equal.class)
+            @Spec(path = "sigla", spec = Equal.class),
+            @Spec(path = "departmentId", spec = Equal.class)
     })
     public interface UserSpec extends Specification<User> {}
 

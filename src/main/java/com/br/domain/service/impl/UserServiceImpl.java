@@ -109,6 +109,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public List<User> buscarUsuariosDoDepartamento(Long departmentId) {
+		return userRepository.buscarUsuariosDoDepartamento(departmentId);
+	}
+
+	@Override
     public User deactivateUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));

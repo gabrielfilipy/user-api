@@ -1,5 +1,6 @@
 package com.br.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -25,5 +26,9 @@ public interface UserRepository extends JpaRepository<User, Long>,
 
 	@EntityGraph(attributePaths = "roles", type = EntityGraph.EntityGraphType.FETCH)
 	Optional<User> findByMatricula(String matricula);
+
+	@Query("FROM User WHERE departmentId = :departmentId")
+	List<User> buscarUsuariosDoDepartamento(Long departmentId);
+
 
 }

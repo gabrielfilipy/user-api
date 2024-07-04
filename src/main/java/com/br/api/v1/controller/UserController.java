@@ -79,6 +79,10 @@ public class UserController {
 	    return ResponseEntity.ok().body(new PageImpl<>(userDepartmentModels, usersPage.getPageable(), usersPage.getTotalElements()));
 	}
 
+	@GetMapping("/department/{dapartmentId}")
+	public ResponseEntity<List<UserModel>> getListar(@PathVariable (name = "dapartmentId") Long dapartmentId) {
+		return ResponseEntity.status(HttpStatus.OK).body(userModelMapper.toCollectionModel(userService.buscarUsuariosDoDepartamento(dapartmentId)));
+	}
 
 	//@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
 	@GetMapping("/buscar/{id}")

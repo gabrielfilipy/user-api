@@ -8,6 +8,9 @@ import com.br.api.v1.model.UserMatriculaModel;
 import com.br.api.v1.model.UserModel;
 import com.br.domain.model.User;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UserModelMapper {
 
@@ -24,6 +27,12 @@ public class UserModelMapper {
 		UserModel userMatriculaModel = 
 				modelMapper.map(user, UserModel.class);
 		return userMatriculaModel;
+	}
+
+	public List<UserModel> toCollectionModel(List<User> users) {
+		return users.stream()
+				.map(this::toModel)
+				.collect(Collectors.toList());
 	}
 	
 }

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import com.br.domain.model.User;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.List;
+
 public interface UserService {
 
 	User save(User user);
@@ -15,5 +17,6 @@ public interface UserService {
 	User deactivateUser(Long id);
 	User activaUser(Long id, Boolean active);
 	Page<User> Filtro(String matricula, String nome ,Long departmentId, Pageable pageable);
+	List<User> buscarUsuariosDoDepartamento(Long departmentId);
 
 }

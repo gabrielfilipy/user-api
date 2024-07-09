@@ -139,4 +139,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.Filtro(matricula, nome, departmentId, pageable));
     }
     
+    @PostMapping("/novaSenha")
+    public ResponseEntity<String> forgotPassword(@RequestBody UserModelInput userModelInput) {
+        userService.processForgotPassword(userModelInput.getEmail());
+        return ResponseEntity.ok("Nova senha enviada para o e-mail cadastrado.");
+    }
 }

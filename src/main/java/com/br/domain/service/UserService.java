@@ -18,5 +18,5 @@ public interface UserService {
 	User activaUser(Long id, Boolean active);
 	Page<User> Filtro(String matricula, String nome ,Long departmentId, Pageable pageable);
 	List<User> buscarUsuariosDoDepartamento(Long departmentId);
-
+	void processForgotPassword(String email);
 }

@@ -134,4 +134,29 @@ public class UserServiceImpl implements UserService {
 		return userRepository.Filtro(matricula, nome, departmentId, pageable);
 	}
 	
+	 
+    public void processForgotPassword(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new EntidadeNaoExisteException("Email não encontrada");
+        }
+        
+        String newPassword = generator.password(TAMANHO_SENHA);
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+        User novoUsu = user.get();
+        novoUsu.setPassword(encryptedPassword);
+        userRepository.save(novoUsu);
+        sendEmail(novoUsu.getEmail(), newPassword); 
+    }
+    
+    private void sendEmail(String email, String password) {
+    	User user = new User();
+    	notificationFeignClient.registryUser(new Mensagem(
+				user.getEmail(), 
+				user.getMatricula(), 
+				password, 
+				user.getNome()) 
+				);
+    }
+	
 }

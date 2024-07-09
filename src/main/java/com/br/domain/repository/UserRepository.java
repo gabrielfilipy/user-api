@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.br.domain.model.User;
@@ -30,5 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long>,
 	@Query("FROM User WHERE departmentId = :departmentId")
 	List<User> buscarUsuariosDoDepartamento(Long departmentId);
 
-
+	@Query("FROM User WHERE matricula = :matricula AND password = :password")
+	Optional<User> findByMatriculaAndPassword(@Param("matricula") String matricula, @Param("password") String password);
+	
 }

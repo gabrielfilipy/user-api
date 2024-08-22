@@ -1,5 +1,7 @@
 package com.br.core.security;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +18,7 @@ public class UserDatailServiceImpl implements UserDetailsService{
 	@Autowired
 	private UserRepository userRepository;
 	
-	public UserDetails loadUserById(Long userId) throws AuthenticationCredentialsNotFoundException {
+	public UserDetails loadUserById(UUID userId) throws AuthenticationCredentialsNotFoundException {
 		User userModel = userRepository.findById(userId)
 				.orElseThrow(() -> 
 				new AuthenticationCredentialsNotFoundException("Usuario Not Found with userId :" + userId));

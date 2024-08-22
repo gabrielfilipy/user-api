@@ -27,7 +27,7 @@ public class JwtProvider {
                 }).collect(Collectors.joining(","));
 
         String roles1 = Jwts.builder()
-                .setSubject((userPrincipal.getId().toString()))
+                .setSubject((userPrincipal.getUserId().toString()))
                 .claim("roles", roles)
                 .claim("nome", userPrincipal.getNome())
                 .claim("matricula", userPrincipal.getMatricula())

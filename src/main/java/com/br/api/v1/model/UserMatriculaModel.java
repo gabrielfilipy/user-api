@@ -1,5 +1,7 @@
 package com.br.api.v1.model;
 
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +11,6 @@ public class UserMatriculaModel {
 
 	private String matricula;
 	private String nome;
-	private Long id;
+	private UUID userId;
 	
 }

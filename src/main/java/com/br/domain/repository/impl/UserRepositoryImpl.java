@@ -2,6 +2,7 @@ package com.br.domain.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,7 +26,7 @@ public class UserRepositoryImpl implements UserRepositoryQuery{
 	    private EntityManager manager;
 
 	    @Override
-		public Page<User> Filtro(String matricula, String nome, Long departmentId, Pageable pageable) {
+		public Page<User> Filtro(String matricula, String nome, UUID departmentId, Pageable pageable) {
 	        CriteriaBuilder builder = manager.getCriteriaBuilder();
 	        CriteriaQuery<User> criteria = builder.createQuery(User.class);
 	        Root<User> root = criteria.from(User.class);
@@ -39,7 +40,7 @@ public class UserRepositoryImpl implements UserRepositoryQuery{
 	    }
 
 
-	    private Predicate[] criarRestricoes(String matricula, String nome, Long departmentId, CriteriaBuilder builder, Root<User> root) {
+	    private Predicate[] criarRestricoes(String matricula, String nome, UUID departmentId, CriteriaBuilder builder, Root<User> root) {
 	        List<Predicate> predicates = new ArrayList<>();
 	        
 	  
@@ -63,7 +64,7 @@ public class UserRepositoryImpl implements UserRepositoryQuery{
 	    }
 
 
-	    private Long totalElementos(String matricula, String nome, Long departmentId) {
+	    private Long totalElementos(String matricula, String nome, UUID departmentId) {
 	        CriteriaBuilder builder = manager.getCriteriaBuilder();
 	        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 	        Root<User> root = criteria.from(User.class);

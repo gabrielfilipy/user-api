@@ -1,17 +1,19 @@
 package com.br.api.v1.model.input;
 
+import java.util.UUID;
+
 import lombok.*;
 
 @Getter
 @Setter
 public class UserModelInput {
 
-	private Long id;
+	private UUID userId;
 	private String nome;
 	private String password;
 	private String matricula;
 	private String email;
-	private Long departmentId;
+	private UUID departmentId;
 	private String telefone;
 	private String endereco;
 	private String rg;

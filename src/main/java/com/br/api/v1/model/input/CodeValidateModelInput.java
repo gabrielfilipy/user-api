@@ -1,5 +1,7 @@
 package com.br.api.v1.model.input;
 
+import java.util.UUID;
+
 import com.br.domain.model.User;
 
 import lombok.Getter;
@@ -9,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class CodeValidateModelInput {
 	
-	private Long id;
+	private UUID id;
 
 	private String code;
 	

@@ -2,6 +2,7 @@ package com.br.core.config;
 
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -13,26 +14,24 @@ public class Generator {
     private static final String DIGITOS = "0123456789";
     private static final String ESPECIAIS = "!@#$%^&*()-_=+[{]}|;:,<.>/?";
 
-	private Long dado;
-    private Long cont = 1L;
     private String num = "";
+    private Long cont = 1L;
 
-    public void sigla(Long inicio) {
-        this.dado = inicio;
-        if((this.dado >= 9) || (this.dado<100)) {
-        	Long can = cont + this.dado;
-            num = "000" + can; 
-        }
-        if (this.dado < 9) {
-        	Long can = cont + this.dado;
-            num = "0000" + can; 
+    public void sigla(UUID inicio) {
+        if (inicio != null) {
+            long mostSigBits = Math.abs(inicio.getMostSignificantBits());
+            long can = cont + mostSigBits % 10000; // Ajuste para garantir que `can` seja um número de 4 dígitos
+            num = String.format("%04d", can); // Formatação para 4 dígitos com zeros à esquerda
+        } else {
+            // Caso o UUID seja nulo, tratar o caso de acordo
+            num = "0000"; // Valor padrão ou tratamento adequado
         }
     }
 
     public String getSigla(String nomeDepartamento) {
         return nomeDepartamento + this.num;
     }
-    
+
     public static String password(int comprimento) {
         StringBuilder senha = new StringBuilder();
         Random random = new SecureRandom();
@@ -65,5 +64,4 @@ public class Generator {
         int index = random.nextInt(conjuntoCaracteres.length());
         return conjuntoCaracteres.charAt(index);
     }
-	
 }

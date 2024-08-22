@@ -1,5 +1,7 @@
 package com.br.infrastructure.externalservice.rest.department;
 
+import java.util.UUID;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,6 @@ import com.br.infrastructure.externalservice.rest.department.model.Department;
 public interface DepartmentFeignClient {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/buscar/{id}")
-	Department getDepartment(@PathVariable("id") Long id);
+	Department getDepartment(@PathVariable("id") UUID id);
 	
 }

@@ -2,6 +2,7 @@ package com.br.core.security;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,7 +26,7 @@ public class UserDatailImpl implements UserDetails{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private UUID userId;
 	
 	private Boolean active;
 	
@@ -38,7 +39,7 @@ public class UserDatailImpl implements UserDetails{
 
 	private String email;
 
-	private Long departmentId;
+	private UUID departmentId;
 	
 	private Collection<? extends GrantedAuthority> authorities; 
 	
@@ -47,7 +48,7 @@ public class UserDatailImpl implements UserDetails{
 				.map(role -> new SimpleGrantedAuthority(role.getAuthority()))
 				.collect(Collectors.toList());
 		return new UserDatailImpl(
-			user.getId(),
+			user.getUserId(),
 			user.getActive(),
 			user.getNome(),
 			user.getPassword(),

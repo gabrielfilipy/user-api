@@ -1,19 +1,13 @@
 package com.br.domain.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
@@ -24,8 +18,8 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue( strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue( strategy = GenerationType.AUTO)
+	private UUID userId;
 	
 	private Boolean active;
 	
@@ -45,7 +39,7 @@ public class User implements Serializable {
 	private String email;
 	
 	@Column(name = "department_id")
-	private Long departmentId;
+	private UUID departmentId;
 
 	@Column(name = "telefone")
 	private String telefone;

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -84,13 +85,13 @@ public class UserController {
 	}
 
 	@GetMapping("/department/{dapartmentId}")
-	public ResponseEntity<List<UserModel>> getListar(@PathVariable (name = "dapartmentId") Long dapartmentId) {
+	public ResponseEntity<List<UserModel>> getListar(@PathVariable (name = "dapartmentId") UUID dapartmentId) {
 		return ResponseEntity.status(HttpStatus.OK).body(userModelMapper.toCollectionModel(userService.buscarUsuariosDoDepartamento(dapartmentId)));
 	}
 
 	//@PreAuthorize("hasAnyRole('ROLE_ESTAGIARIO')")
 	@GetMapping("/buscar/{id}")
-	public ResponseEntity<User> getUser(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<User> getUser(@PathVariable(name = "id") UUID id) {
 		User user = userService.findById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(user);
 	}
@@ -111,7 +112,7 @@ public class UserController {
 		UserModel userModel = userModelMapper.toModel(userService.save(user));
 		
 		String routingKey = "user-created";
-		Message message = new Message(userModel.getId().toString().getBytes()); 
+		Message message = new Message(userModel.getUserId().toString().getBytes()); 
 		rabbitTemplate.convertAndSend(routingKey, userModel);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(userModel);
@@ -120,7 +121,7 @@ public class UserController {
 	//@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
 	@PutMapping("/editar/{id}")
 	public ResponseEntity<UserModel> editar(@RequestBody UserModelInput userModelInput, 
-			@PathVariable(name = "id") Long id) {
+			@PathVariable(name = "id") UUID id) {
 		User userAtual = userService.findById(id);
 		userEditModelMapperBack.copyToDomainObject(userModelInput, userAtual);
 		return ResponseEntity.status(HttpStatus.CREATED).body(userModelMapper.toModel(userService.save(userAtual)));
@@ -128,7 +129,7 @@ public class UserController {
 
 	@PatchMapping("/ativar-desativar/{id}")
     public ResponseEntity<UserModel> activateUser(@RequestBody UserActiveModelInput userActiveModelInput,
-																  @PathVariable(name = "id") Long id ) {
+																  @PathVariable(name = "id") UUID id ) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(
 				userModelMapper.toModel(userService.activaUser(id, userActiveModelInput.isActive())));
  	}
@@ -136,14 +137,14 @@ public class UserController {
 	//@PreAuthorize("hasAnyRole('ROLE_GESTOR')")
     @PutMapping("/desativar/{id}")
     public ResponseEntity<UserModel> deactivateUser( @RequestBody UserModelInput userModelInput, 
-    		@PathVariable (name = "id") Long id) {
+    		@PathVariable (name = "id") UUID id) {
 	    User user = userService.findById(id);
 		userEditModelMapperBack.copyToDomainObject(userModelInput, user);
 		return ResponseEntity.status(HttpStatus.CREATED).body(userModelMapper.toModel(userService.deactivateUser(id)));
 	}
     
     @GetMapping("/filtro")
-    public ResponseEntity<Page<User>> getFiltro(String matricula, String nome ,Long departmentId,
+    public ResponseEntity<Page<User>> getFiltro(String matricula, String nome ,UUID departmentId,
     											 @PageableDefault(page = 0, size = 10) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.Filtro(matricula, nome, departmentId, pageable));
     }

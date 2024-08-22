@@ -1,6 +1,8 @@
 package com.br.domain.model;
 
 import java.io.Serializable;
+import java.util.UUID;
+
 import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import com.br.domain.enums.RoleType;
@@ -17,7 +19,7 @@ public class Role implements Serializable, GrantedAuthority {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue( strategy = GenerationType.AUTO)
-	private Long roleId;
+	private UUID roleId;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, unique = true, length = 30)

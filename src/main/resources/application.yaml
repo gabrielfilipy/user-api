@@ -3,9 +3,11 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/user-service?createDatabaseIfNotExist=true&serverTimezone=UTC
-    username: root
-    password: 
+    url: jdbc:postgresql://localhost:5432/user-service?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: postgres
+    password: admin 
+    driver-class-name: org.postgresql.Driver
+    
   rabbitmq:
     host: toad.rmq.cloudamqp.com
     port: 5672
@@ -16,12 +18,14 @@ spring:
       enabled: false
   
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
-    show-sql: true
-
+      #ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      
+flyway:
+  locations: classpath:db/migration
+  baseline-on-migrate: true
+  
 auth:
   jwtSecret: 817cff65-0402-46fb-ba27-7c6809959fd1
   jwtExpiration: 300000
-  

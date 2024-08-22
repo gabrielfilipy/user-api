@@ -1,5 +1,7 @@
 package com.br.api.v1.model;
 
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class DepartmentModel {
 
-    private Long id;
+    private UUID departamentoId;
     private String nome;
 
 }

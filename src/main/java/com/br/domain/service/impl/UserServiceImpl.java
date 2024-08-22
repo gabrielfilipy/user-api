@@ -2,6 +2,7 @@ package com.br.domain.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.br.domain.enums.RoleType;
 import com.br.domain.model.Role;
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
 	public User save(User user) {
 		Department department = departmentFeignClient.getDepartment(user.getDepartmentId());
 		User userSave = userRepository.save(user);
-		String matricula = getMatricula(department, userSave.getId());
+		String matricula = getMatricula(department, userSave.getUserId());
 		String password = generator.password(TAMANHO_SENHA);
 		Role role = roleService.findByRoleName(RoleType.ROLE_FUNCIONARIO)
 				.orElseThrow(() -> new RuntimeException("Error: Permissão 'ROLE_FUNCIONARIO´  não existe."));
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 		return userSave;
 	}
 
-	private String getMatricula(Department department, Long id) {
+	private String getMatricula(Department department, UUID id) {
         generator.sigla(id);
 		return generator.getSigla(department.getSigla());
 	}
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findById(Long id) {
+	public User findById(UUID id) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) {
 			throw new EntidadeNaoExisteException("Usuário informado não existe: " + id);
@@ -109,12 +110,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> buscarUsuariosDoDepartamento(Long departmentId) {
+	public List<User> buscarUsuariosDoDepartamento(UUID departmentId) {
 		return userRepository.buscarUsuariosDoDepartamento(departmentId);
 	}
 
 	@Override
-    public User deactivateUser(Long id) {
+    public User deactivateUser(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         user.setActive(false);
@@ -122,7 +123,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User activaUser(Long id, Boolean active) {
+	public User activaUser(UUID id, Boolean active) {
 			User user = userRepository.findById(id)
 		                .orElseThrow(() -> new RuntimeException("Usuario não encontrado."));
 			user.setActive(active);
@@ -130,7 +131,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<User> Filtro(String matricula, String nome, Long departmentId, Pageable pageable) {
+	public Page<User> Filtro(String matricula, String nome, UUID departmentId, Pageable pageable) {
 		return userRepository.Filtro(matricula, nome, departmentId, pageable);
 	}
 	

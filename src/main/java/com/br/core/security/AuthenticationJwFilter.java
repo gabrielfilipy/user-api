@@ -1,6 +1,7 @@
 package com.br.core.security;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -37,7 +38,8 @@ public class AuthenticationJwFilter extends OncePerRequestFilter {
 			String jwtStr = getTokenHeader(httpServletRequest);
 			if(jwtStr != null && jwtProvider.validateJwt(jwtStr)) {
 				String userId = jwtProvider.getSubjectJwt(jwtStr);
-				UserDetails userDetails = userDetailService.loadUserById(Long.parseLong(userId));
+				UUID userUuid = UUID.fromString(userId); // Alteração aqui
+				UserDetails userDetails = userDetailService.loadUserById(userUuid);
 				UsernamePasswordAuthenticationToken authentication = 
 						new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());

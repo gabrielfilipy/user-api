@@ -110,10 +110,8 @@ public class UserController {
 	public ResponseEntity<UserModel> cadastrar(@RequestBody @Valid UserModelInput userModelInput) {
 		User user = userModelMapperBack.toModel(userModelInput);
 		UserModel userModel = userModelMapper.toModel(userService.save(user));
-		
-		String routingKey = "user-created";
-		Message message = new Message(userModel.getUserId().toString().getBytes()); 
-		rabbitTemplate.convertAndSend(routingKey, userModel);
+
+		rabbitTemplate.convertAndSend("user-document", userModel);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(userModel);
 	}

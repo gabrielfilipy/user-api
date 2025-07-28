@@ -1,9 +1,11 @@
 server:
   port: 8082
+  servlet:
+    context-path: /user
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/user-service?createDatabaseIfNotExist=true&serverTimezone=UTC
+    url: jdbc:postgresql://localhost:5432/user_api?createDatabaseIfNotExist=true&serverTimezone=UTC
     username: postgres
     password: admin 
     driver-class-name: org.postgresql.Driver

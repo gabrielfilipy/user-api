@@ -12,35 +12,38 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-	@Bean
-	public Queue userDocumentQueue() {
-		return new Queue("user-document");
-	}
 	
 	@Bean
-	public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
-		return new RabbitAdmin(connectionFactory);
-	}
-	
-	@Bean
-	public ApplicationListener<ApplicationReadyEvent> 
-	applicationReadyEventApplicationListener(RabbitAdmin admin) {
-		return event -> admin.initialize();
-	}
-	
-	@Bean
-	public Jackson2JsonMessageConverter messageConverter() {
-		return new Jackson2JsonMessageConverter();
-	}
-	
-	// a API de service-registre deve esta rodando para retornar um corpo json o bean abaixo converte para um json
-	
-	@Bean
-	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
-			Jackson2JsonMessageConverter converter) {
-		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setMessageConverter(converter);
-		return rabbitTemplate;
-	}
+    public Queue userDocumentQueue() {
+        return new Queue("user-document", true);
+    }
 
+    @Bean
+    public Queue departmentUserQueue() {
+        return new Queue("department-user", true);
+    }
+    
+    @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
+    }
+    
+    @Bean
+    public ApplicationListener<ApplicationReadyEvent> applicationReadyEventApplicationListener(RabbitAdmin admin) {
+        return event -> admin.initialize();
+    }
+    
+    @Bean
+    public Jackson2JsonMessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+    
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
+                                         Jackson2JsonMessageConverter converter) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(converter);
+        return rabbitTemplate;
+    }
+	
 }
